@@ -11,5 +11,6 @@
   background-image: url("../images/forest.png");
 }
 .water {
-  background-image: url("../images/water.gif");
+  
+  background: url(images/water.gif)
 }
