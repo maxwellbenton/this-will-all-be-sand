@@ -18,7 +18,6 @@ function generateInitialTiles(width, length, type) {
       div.style.height = `${tHeight}px`;
       div.style.top = `${n*tHeight}px`
       div.style.left = `${m*tWidth}px`
-      overlayTiles.push(div)
       if(type === 'checkerboard') {
         allTiles.length % 2 === 0 ? div.style.background = '#666' : div.style.background = '#DDD'
       } else {
@@ -51,7 +50,7 @@ function generateInitialTiles(width, length, type) {
             div.style.backgroundImage = "url('./images/grass2.png')";
           }
       }
-      
+
       allTiles.push(div)
       tileRow.push(div)
     }
@@ -60,27 +59,147 @@ function generateInitialTiles(width, length, type) {
 
   c = document.getElementById("container")
   allTiles = mergeTerrain(allTiles)
-  overlayTiles = blendTerrain(overlayTiles, allTiles)
+  overlayTiles = blendTerrain(allTiles)
   allTiles.forEach((element) => {
+    c.appendChild(element)
+  })
+  overlayTiles.forEach((element) => {
     c.appendChild(element)
   })
 
 }
-function blendTerrain(overlayTiles, allTiles) {
-  newOverlays = overlayTiles.forEach((tile, i) => {
-    if (allTiles[i].className === 'grass' || allTiles[i].className === 'water') {
-      neighbors = [allTiles[i-width-1].className === 'sand' ? true : false, allTiles[i-width].className === 'sand' ? true : false, allTiles[i-width+1].className === 'sand' ? true : false, allTiles[i-1].className === 'sand' ? true : false, allTiles[i+1].className === 'sand' ? true : false, allTiles[i+width-1].className === 'sand' ? true : false, allTiles[i+width].className === 'sand' ? true : false, allTiles[i+width+1].className === 'sand' ? true : false]
-      debugger
-    } else {
-      tile.style.opacity = "0"
+function blendTerrain(allTiles) {
+  overlayTiles = []
+  for(let p = width; p < allTiles.length; p++) {
+    if (allTiles[p].className === 'grass' || allTiles[p].className === 'water') {
+
+      if (allTiles[p-width-1]) {
+        if (allTiles[p-width-1].className === 'sand') {
+          var div = allTiles[p]
+          div.className = 'sand-overlay'
+          div.style.background = "transparent url('./images/sand_upper_left.png')";
+          div.style.zIndex = "2"
+          overlayTiles.push(div)
+        }
+      }
+      if (allTiles[p-width].className === 'sand') {
+        var div = allTiles[p]
+        div.className = 'sand-overlay'
+        div.style.background = "transparent url('./images/sand_left.png')";
+        div.style.zIndex = "2"
+        overlayTiles.push(div)
+      }
+      if (allTiles[p-width+1].className === 'sand') {
+        var div = allTiles[p]
+        div.className = 'sand-overlay'
+        div.style.background = "transparent url('./images/sand_lower_left.png')";
+        div.style.zIndex = "2"
+        overlayTiles.push(div)
+      }
+      if (allTiles[p-1].className === 'sand') {
+        var div = allTiles[p]
+        div.className = 'sand-overlay'
+        div.style.background = "transparent url('./images/sand_top.png')";
+        div.style.zIndex = "2"
+        overlayTiles.push(div)
+      }
+      if (allTiles[p+1]) {
+        if (allTiles[p+1].className === 'sand') {
+          var div = allTiles[p]
+          div.className = 'sand-overlay'
+          div.style.background = "transparent url('./images/sand_bottom.png')";
+          div.style.zIndex = "2"
+          overlayTiles.push(div)
+        }
+      }
+      if (allTiles[p+width-1]) {
+        if (allTiles[p+width-1].className === 'sand') {
+          var div = allTiles[p]
+          div.className = 'sand-overlay'
+          div.style.background = "transparent url('./images/sand_upper_right.png')";
+          div.style.zIndex = "2"
+          overlayTiles.push(div)
+        }
+      }
+      if (allTiles[p+width]) {
+        if (allTiles[p+width].className === 'sand') {
+          var div = allTiles[p]
+          div.className = 'sand-overlay'
+          div.style.background = "transparent url('./images/sand_right.png')";
+          div.style.zIndex = "2"
+          overlayTiles.push(div)
+        }
+      }
+      if (allTiles[p+width+1]) {
+        if (allTiles[p+width+1].className === 'sand') {
+          var div = allTiles[p]
+          div.className = 'sand-overlay'
+          div.style.background = "transparent url('./images/sand_lower_right.png')";
+          div.style.zIndex = "2"
+          overlayTiles.push(div)
+        }
+      }
     }
-    return tile
-  })
-  return newOverlays
+  }
+  return overlayTiles
+  //
+  //
+  //     if (allTiles[p-width-1]) {
+  //       allTiles[p-width-1].className === 'sand' ?  : false
+  //     } else {
+  //
+  //     }
+  //     neighbors.push(allTiles[p-width] ?allTiles[p-width].className === 'sand' ? true : false : false)
+  //     neighbors.push(allTiles[p-width+1] ? allTiles[p-width+1].className === 'sand' ? true : false : false)
+  //     neighbors.push(allTiles[p-1] ? allTiles[p-1].className === 'sand' ? true : false : false)
+  //     neighbors.push(allTiles[p+1] ? allTiles[p+1].className === 'sand' ? true : false : false)
+  //     neighbors.push(allTiles[p+width-1] ? allTiles[p+width-1].className === 'sand' ? true : false : false)
+  //     neighbors.push(allTiles[p+width] ? allTiles[p+width].className === 'sand' ? true : false : false)
+  //     neighbors.push(allTiles[p+width+1] ? allTiles[p+width+1].className === 'sand' ? true : false : false)
+  //   } else {
+  //     overlayTiles[p].style.opacity = "0"
+  //   }
+  //   // switch (neighbors) {
+  //   //   case [true,true,true,true,true,true,true,true]:
+  //   //     allTiles[p].style.background = "transparent url('./images/sand_all.png')";
+  //   //     break;
+  //   //   case [true,false,true,true,true,true,true,true]:
+  //   //     allTiles[p].style.backgroundImage = "url('./images/sand_no_left.png')";
+  //   //     break;
+  //   //   case [true,true,true,false,true,true,true,true]:
+  //   //     allTiles[p].style.backgroundImage = "url('./images/sand_no_top.png')";
+  //   //     break;
+  //   //   case [true,true,true,true,false,true,true,true]:
+  //   //     allTiles[p].style.backgroundImage = "url('./images/sand_no_bottom.png')";
+  //   //     break;
+  //   //   case [true,true,true,true,true,true,false,true]:
+  //   //     allTiles[p].style.backgroundImage = "url('./images/sand_no_right.png')";
+  //   //     break;
+    //   case [true,false,true,false,false,true,false,true]:
+    //     allTiles[p].style.backgroundImage = "url('./images/sand_corners.png')";
+    //     break;
+    //   case [true,true,true,true,true,true,true,true]:
+    //     allTiles[p].style.backgroundImage = "url('./images/sand_all.png')";
+    //     break;
+    //   default:
+
+    // }
+  // }
+  // newOverlays = overlayTiles.forEach((tile, i) => {
+  //   debugger
+  //   // if (allTiles[i].className === 'grass' || allTiles[i].className === 'water') {
+  //   //   neighbors = [allTiles[i-width-1].className === 'sand' ? true : false, allTiles[i-width].className === 'sand' ? true : false, allTiles[i-width+1].className === 'sand' ? true : false, allTiles[i-1].className === 'sand' ? true : false, allTiles[i+1].className === 'sand' ? true : false, allTiles[i+width-1].className === 'sand' ? true : false, allTiles[i+width].className === 'sand' ? true : false, allTiles[i+width+1].className === 'sand' ? true : false]
+  //   //   debugger
+  //   // } else {
+  //   //   tile.style.opacity = "0"
+  //   // }
+  //   // return tile
+  // })
+  // return ov
 }
 
 function mergeTerrain(allTiles) {
-  
+
   for(let o = 0; o < allTiles.length/10; o++) {
     r = Math.floor(Math.random() * (allTiles.length - width) + width)
     nearbyTiles = [allTiles[r-width].className,allTiles[r-1].className,allTiles[r+1].className]
@@ -101,7 +220,7 @@ function mergeTerrain(allTiles) {
     } else {
       allTiles[r].style.backgroundImage = "url('./images/grass2.png')"
     }
-    
+
   }
   return allTiles
 }
